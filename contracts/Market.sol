@@ -8,14 +8,14 @@ contract Market is ProductFactory {
     event priceUpdated(uint _productId, uint _newPrice);
     event saleStarted(uint _productId);
     event saleClosed(uint _productId);
-    event buySuccess(uint _productId, address _from, address _to, uint32 _price);
+    event buySuccess(uint _productId, address _from, address _to, uint _price);
 
     modifier hasEnoughMoney(uint _productId){
-        require(msg.value >= products[_productId].price);
+        require(msg.value >= products[_productId].price, "The amount is not sufficient");
         _;
     }
 
-    function setPrice(uint _productId, uint32 _price) public onlyProductOwner(_productId) isValidPrice(_productId, _price){
+    function setPrice(uint _productId, uint _price) public onlyProductOwner(_productId) isValidPrice(_productId, _price){
         products[_productId].price = _price;
         emit priceUpdated(_productId, _price);    
     }

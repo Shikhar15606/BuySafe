@@ -6,10 +6,10 @@ import "./Brand.sol";
 contract ProductFactory is Brand {
    struct Product{
        address manufacturer;
-       uint256 mfg;
        string model;
-       uint32 price;
-       uint32 mrp;
+       uint256 mfg;
+       uint256 price;
+       uint256 mrp;
        bool forSale;
    }
 
@@ -19,22 +19,22 @@ contract ProductFactory is Brand {
    event ProductCreated(address _manufacturer, uint _productId);
 
     modifier onlyProductOwner(uint _productId) {
-        require(productToOwner[_productId] == msg.sender);
+        require(productToOwner[_productId] == msg.sender, "Only Product Owner can perform this operation");
         _;
     }
 
     modifier isValidPrice(uint _productId, uint _price){
-        require(_price <= products[_productId].mrp);
+        require(_price <= products[_productId].mrp, "Price must be less than MRP");
         _;
     }
 
     modifier isAvailableForSale(uint _productId){
-        require(products[_productId].forSale == true);
+        require(products[_productId].forSale == true, "The product is not available for sale");
         _;
     }
 
-   function createProduct(uint256 _mfg, string memory _model, uint32 _price, uint32 _mrp) public checkBrand(msg.sender){
-       products.push(Product(msg.sender,_mfg,_model,_price,_mrp,true));
+   function createProduct(uint _mfg, string memory _model, uint _price, uint _mrp) public checkBrand(msg.sender){
+       products.push(Product(msg.sender,_model,_mfg,_price,_mrp,true));
        uint _productId = products.length - 1;
        productToOwner[_productId] = msg.sender;
        emit ProductCreated(msg.sender, _productId);
