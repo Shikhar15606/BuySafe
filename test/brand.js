@@ -11,43 +11,30 @@ contract('Brand', accounts => {
   // ============================== Unit Tests ========================================
   it('Create a Brand', async () => {
       const result = await BrandInstance.createBrand(
-        accounts[1],
         "Nike",
         { from: accounts[0] }
       );
       assert.equal(result.logs[0].args._brandName, "Nike");
-      assert.equal(result.logs[0].args._owner, accounts[1]);
-  });
-
-  it('Only admin can create a Brand', async () => {
-    await utils.shouldThrow(BrandInstance.createBrand(
-      accounts[1],
-      "Nike",
-      { from: accounts[2] }
-    ));
+      assert.equal(result.logs[0].args._owner, accounts[0]);
   });
 
   it('Brand name must be unique', async () => {
-    const result = await BrandInstance.createBrand(
-      accounts[1],
+    await BrandInstance.createBrand(
       "Nike",
       { from: accounts[0] }
     );
     await utils.shouldThrow(BrandInstance.createBrand(
-      accounts[2],
       "Nike",
-      { from: accounts[0] }
+      { from: accounts[1] }
     ));
   });
 
   it('Owner can have only 1 Brand', async () => {
-    const result = await BrandInstance.createBrand(
-      accounts[1],
+    await BrandInstance.createBrand(
       "Nike",
       { from: accounts[0] }
     );
     await utils.shouldThrow(BrandInstance.createBrand(
-      accounts[1],
       "Reebok",
       { from: accounts[0] }
     ));

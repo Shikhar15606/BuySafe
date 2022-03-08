@@ -11,9 +11,8 @@ contract('Market', accounts => {
     // ============================== Unit Tests ========================================
     it('Change price of product', async () => {
         await MarketInstance.createBrand(
-          accounts[1],
           "Nike",
-          { from: accounts[0] }
+          { from: accounts[1] }
         );
   
         await MarketInstance.createProduct(
@@ -31,9 +30,8 @@ contract('Market', accounts => {
 
     it('Only Owner can change price of product', async () => {
         await MarketInstance.createBrand(
-          accounts[1],
           "Nike",
-          { from: accounts[0] }
+          { from: accounts[1] }
         );
   
         await MarketInstance.createProduct(
@@ -49,9 +47,8 @@ contract('Market', accounts => {
 
     it('Price must be less than MRP', async () => {
         await MarketInstance.createBrand(
-          accounts[1],
           "Nike",
-          { from: accounts[0] }
+          { from: accounts[1] }
         );
   
         await MarketInstance.createProduct(
