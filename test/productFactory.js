@@ -10,31 +10,28 @@ contract('ProductFactory', accounts => {
 
   // ============================== Unit Tests ========================================
   it('Create a Product', async () => {
-    await ProductFactoryInstance.createBrand(
-        "Nike",
-        { from: accounts[1]}
-      );
+    await ProductFactoryInstance.createBrand('Nike', { from: accounts[1] });
 
     const result = await ProductFactoryInstance.createProduct(
-        new Date().getTime(),
-        "Air Jordans",
-        1,
-        1000,
-        { from: accounts[1] }
-      );
-      assert.equal(result.logs[0].args._manufacturer, accounts[1]);
-      assert.equal(result.logs[0].args._productId, 0);
-  });
-
-  it('Do not create a product without brand', async () => {
-    await utils.shouldThrow(ProductFactoryInstance.createProduct(
       new Date().getTime(),
-      "Air Jordans",
+      'Air Jordans',
       1,
       1000,
       { from: accounts[1] }
-    ));
+    );
+    assert.equal(result.logs[0].args._manufacturer, accounts[1]);
+    assert.equal(result.logs[0].args._productId, 0);
   });
 
-
+  it('Do not create a product without brand', async () => {
+    await utils.shouldThrow(
+      ProductFactoryInstance.createProduct(
+        new Date().getTime(),
+        'Air Jordans',
+        1,
+        1000,
+        { from: accounts[1] }
+      )
+    );
+  });
 });

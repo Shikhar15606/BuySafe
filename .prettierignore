@@ -1,0 +1,5 @@
+.github
+build
+client/.next
+client/node_modules
+node_modules

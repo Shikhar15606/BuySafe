@@ -1,5 +1,5 @@
-const Product = artifacts.require('./Product.sol')
+const Product = artifacts.require('./Product.sol');
 
 module.exports = function (deployer) {
-  deployer.deploy(Product)
-}
+  deployer.deploy(Product);
+};
