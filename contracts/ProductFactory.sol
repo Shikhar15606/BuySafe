@@ -53,4 +53,8 @@ contract ProductFactory is Brand {
         productToOwner[_productId] = msg.sender;
         emit ProductCreated(msg.sender, _productId);
     }
+
+    function productCount() public view returns (uint256) {
+        return products.length;
+    }
 }

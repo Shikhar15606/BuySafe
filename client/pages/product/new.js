@@ -35,7 +35,7 @@ function NewProductPage(props) {
 
   const downloadQR = useCallback(() => {
     const canvas = document.getElementById(
-      `http://localhost:3000/product/${productId}`
+      `${process.env.APP_URL}/product/${productId}`
     );
     const pngUrl = canvas
       .toDataURL('image/png')
@@ -55,8 +55,8 @@ function NewProductPage(props) {
         <Message msg={msg} />
         <div>
           <QRCode
-            id={`http://localhost:3000/product/${productId}`}
-            value={`http://localhost:3000/product/${productId}`}
+            id={`${process.env.APP_URL}/product/${productId}`}
+            value={`${process.env.APP_URL}/product/${productId}`}
             size={290}
             level={'H'}
             includeMargin={true}
