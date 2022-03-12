@@ -5,16 +5,6 @@ export default () => (
   <div>
     <h1>Home</h1>
     <p>Landing Page</p>
-    {/* <div>
-      <Link href='/dapp'>
-        <a>My Dapp</a>
-      </Link>
-    </div>
-    <div>
-      <Link href='/accounts'>
-        <a>My Accounts</a>
-      </Link>
-    </div> */}
     <div>
       <Link href='/product/1'>
         <a>Product Detail Page</a>
