@@ -19,7 +19,7 @@ function NewBrandPage(props) {
       setMsg(err.message);
       setLoading(false);
     }
-  }, []);
+  }, [brandName]);
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
   return (
