@@ -5,6 +5,7 @@ import contractDefinition from '../../build/contracts/Market.json';
 import { useState, useEffect, useCallback } from 'react';
 import Loading from '../components/loading';
 import Message from '../components/message';
+import Navbar from '../components/navbar';
 
 function MyApp({ Component, pageProps }) {
   const [web3, setWeb3] = useState();
@@ -42,9 +43,15 @@ function MyApp({ Component, pageProps }) {
       <Message msg='Failed to load web3, accounts, or contract. Check console for details.' />
     );
   return web3 && accounts && accounts.length > 0 && contract ? (
-    <Component {...newProps} />
+    <>
+      <Navbar />
+      <Component {...newProps} />
+    </>
   ) : (
-    <Message msg='Connect accounts with metamask' />
+    <>
+      <Navbar />
+      <Message msg='Connect accounts with metamask' />
+    </>
   );
 }
 
