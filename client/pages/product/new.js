@@ -2,8 +2,13 @@ import { useState, useCallback } from 'react';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
 import QRCode from 'qrcode.react';
-import { PlusCircleIcon } from '@heroicons/react/solid';
+import {
+  PlusCircleIcon,
+  DocumentDownloadIcon,
+  LinkIcon,
+} from '@heroicons/react/solid';
 import CalendarComponent from '../../components/calendar';
+import Link from 'next/link';
 
 function NewProductPage(props) {
   const [model, setModel] = useState('');
@@ -55,15 +60,42 @@ function NewProductPage(props) {
     return (
       <>
         <Message msg={msg} />
-        <div>
-          <QRCode
-            id={`${process.env.APP_URL}/product/${productId}`}
-            value={`${process.env.APP_URL}/product/${productId}`}
-            size={290}
-            level={'H'}
-            includeMargin={true}
-          />
-          <a onClick={downloadQR}> Download QR </a>
+        <div className='flex items-start justify-center pb-12 px-4 sm:px-6 lg:px-8'>
+          <div className='max-w-md w-full space-y-8'>
+            <div className='flex flex-1 justify-center'>
+              <QRCode
+                id={`${process.env.APP_URL}/product/${productId}`}
+                value={`/product/${productId}`}
+                size={290}
+                level={'H'}
+                includeMargin={true}
+              />
+            </div>
+            <Link href={`/product/${productId}`}>
+              <button className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
+                  <LinkIcon
+                    className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
+                    aria-hidden='true'
+                  />
+                </span>
+                See Details
+              </button>
+            </Link>
+
+            <button
+              className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              onClick={downloadQR}
+            >
+              <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
+                <DocumentDownloadIcon
+                  className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
+                  aria-hidden='true'
+                />
+              </span>
+              Download
+            </button>
+          </div>
         </div>
       </>
     );
@@ -79,7 +111,7 @@ function NewProductPage(props) {
               alt='BuySafe'
             />
             <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
-              Create New Product Tokens
+              Mint New Product Tokens
             </h2>
             <p className='font-medium mt-2 text-center text-sm text-indigo-600'>
               You must have a brand before creating product tokens{' '}
