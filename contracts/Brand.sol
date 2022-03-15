@@ -47,4 +47,8 @@ contract Brand {
         delete exists[brands[_owner].brandName];
         emit BrandDeleted(_owner, brands[_owner].brandName);
     }
+
+    function getBrandsLength() public view returns (uint256) {
+        return brandOwners.length;
+    }
 }

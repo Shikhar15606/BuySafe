@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
+import Upload from '../../components/upload';
 
 function NewBrandPage(props) {
   const [brandName, setBrandName] = useState('');
@@ -35,7 +36,7 @@ function NewBrandPage(props) {
             Enter your Brand Name{' '}
           </p>
         </div>
-        <form className='mt-8 space-y-9'>
+        <div className='mt-8 space-y-9'>
           <div className='rounded-md shadow-sm space-y-1'>
             <div>
               <label htmlFor='email-address' className='sr-only'>
@@ -54,6 +55,7 @@ function NewBrandPage(props) {
               />
             </div>
           </div>
+          <Upload />
           <div>
             <button
               className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
@@ -68,7 +70,7 @@ function NewBrandPage(props) {
               Create
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
