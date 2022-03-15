@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import './Brand.sol';
+import './Report.sol';
 
-contract ProductFactory is Brand {
+contract ProductFactory is Report {
     struct Product {
         address manufacturer;
         string model;
@@ -51,6 +51,7 @@ contract ProductFactory is Brand {
         products.push(Product(msg.sender, _model, _mfg, _price, _mrp, true));
         uint256 _productId = products.length - 1;
         productToOwner[_productId] = msg.sender;
+        userBrand[msg.sender][msg.sender].productCount++;
         emit ProductCreated(msg.sender, _productId);
     }
 

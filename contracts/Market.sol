@@ -58,6 +58,20 @@ contract Market is ProductFactory {
         _seller.transfer(products[_productId].price);
         _buyer.transfer(msg.value - products[_productId].price);
         productToOwner[_productId] = msg.sender;
+
+        // Report Stuff
+        address _brandOwner = products[_productId].manufacturer;
+        userBrand[_seller][_brandOwner].productCount--;
+        userBrand[_buyer][_brandOwner].productCount++;
+        // If seller has reported the brand and is now selling his last product of that brand
+        if (
+            userBrand[_seller][_brandOwner].productCount == 0 &&
+            userBrand[_seller][_brandOwner].hasReported
+        ) {
+            userBrand[_seller][_brandOwner].hasReported = false;
+            revokeReport(_brandOwner, _seller);
+        }
+
         emit buySuccess(
             _productId,
             _seller,

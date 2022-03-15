@@ -10,7 +10,9 @@ contract('ProductFactory', accounts => {
 
   // ============================== Unit Tests ========================================
   it('Create a Product', async () => {
-    await ProductFactoryInstance.createBrand('Nike', { from: accounts[1] });
+    await ProductFactoryInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     const result = await ProductFactoryInstance.createProduct(
       new Date().getTime(),

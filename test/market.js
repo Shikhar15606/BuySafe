@@ -11,7 +11,9 @@ contract('Market', accounts => {
 
   // ============================== Unit Tests ========================================
   it('Change price of product', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -27,7 +29,9 @@ contract('Market', accounts => {
   });
 
   it('Only Owner can change price of product', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -43,7 +47,9 @@ contract('Market', accounts => {
   });
 
   it('Price must be less than MRP', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -59,7 +65,9 @@ contract('Market', accounts => {
   });
 
   it('Start Sale', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -74,7 +82,9 @@ contract('Market', accounts => {
   });
 
   it('End Sale', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -88,7 +98,9 @@ contract('Market', accounts => {
     assert.equal(result.logs[0].args._productId, 0);
   });
   it('Buy Product', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -102,6 +114,7 @@ contract('Market', accounts => {
       from: accounts[2],
       value: 10,
     });
+
     assert.equal(result.logs[0].args._productId, 0);
     assert.equal(result.logs[0].args._from, accounts[1]);
     assert.equal(result.logs[0].args._to, accounts[2]);
@@ -109,7 +122,9 @@ contract('Market', accounts => {
   });
 
   it('Can not buy product from less balance', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
@@ -125,7 +140,9 @@ contract('Market', accounts => {
   });
 
   it('Can only buy product if its available for sale', async () => {
-    await MarketInstance.createBrand('Nike', { from: accounts[1] });
+    await MarketInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
 
     await MarketInstance.createProduct(
       new Date().getTime(),
