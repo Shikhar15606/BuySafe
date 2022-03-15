@@ -8,9 +8,7 @@ import Message from '../../components/message';
 function ProductDetailPage(props) {
   const router = useRouter();
   const productId = router.query.productId;
-  const [isOwner, setIsOwner] = useState(
-    props.accounts[0] == props.manufacturer
-  );
+  const isOwner = props.accounts[0] == props.owner;
 
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
@@ -58,6 +56,21 @@ function ProductDetailPage(props) {
     }
   }, []);
 
+  const buy = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { accounts, contract } = props;
+      await contract.methods
+        .buyProduct(productId)
+        .send({ from: accounts[0], value: props.price });
+      refreshData();
+    } catch (err) {
+      console.log(err);
+      setMsg(err.message);
+      setLoading(false);
+    }
+  }, [props]);
+
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
   return (
@@ -76,6 +89,7 @@ function ProductDetailPage(props) {
         setSale={flag => {
           setSale(flag);
         }}
+        buy={buy}
       />
       <ol class='relative border-l border-gray-200 dark:border-gray-700'>
         <li class='mb-10 ml-4'>
@@ -133,9 +147,10 @@ export async function getStaticProps(context) {
   const contract = await getServerContract();
   const productDetails = await contract.methods.products(productId).call();
   console.log('Product Details : ', productDetails);
-
+  const owner = await contract.methods.productToOwner(productId).call();
+  console.log('Product Owner : ', owner);
   return {
-    props: { ...productDetails },
+    props: { ...productDetails, owner },
     revalidate: 1,
   };
 }
