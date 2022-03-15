@@ -1,27 +1,82 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import getServerContract from '../../lib/getServerContract';
 import ProductCard from '../../components/productCard';
+import Loading from '../../components/loading';
+import Message from '../../components/message';
 
 function ProductDetailPage(props) {
   const router = useRouter();
   const productId = router.query.productId;
+  const [isOwner, setIsOwner] = useState(
+    props.accounts[0] == props.manufacturer
+  );
 
+  const [msg, setMsg] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const refreshData = useCallback(() => {
+    router.replace(router.asPath);
+  }, []);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [props]);
+
+  const setPrice = useCallback(async newPrice => {
+    try {
+      setLoading(true);
+      const { accounts, contract } = props;
+      await contract.methods
+        .setPrice(productId, newPrice)
+        .send({ from: accounts[0] });
+      refreshData();
+    } catch (err) {
+      console.log(err);
+      setMsg(err.message);
+      setLoading(false);
+    }
+  }, []);
+
+  const setSale = useCallback(async flag => {
+    try {
+      setLoading(true);
+      const { accounts, contract } = props;
+      if (flag)
+        await contract.methods
+          .openForSale(productId)
+          .send({ from: accounts[0] });
+      else
+        await contract.methods
+          .closeForSale(productId)
+          .send({ from: accounts[0] });
+      refreshData();
+    } catch (err) {
+      console.log(err);
+      setMsg(err.message);
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) return <Loading />;
+  if (msg) return <Message msg={msg} />;
   return (
     <div>
-      <h1>Product Detail Page</h1>
-      <p>Get the detailed product data based on the id of product</p>
-      <p>The manufacturer of this product is {props.manufacturer}</p>
-      <p>The model of this product is {props.model}</p>
-      <p>
-        The mfg of this product is{' '}
-        {new Date(parseInt(props.mfg)).toLocaleDateString()}
-      </p>
-      <p>The price of this product is {props.price} weis</p>
-      <p>The mrp of this product is {props.mrp} weis</p>
-      <p>The product is forSale {props.forSale ? 'True' : 'False'}</p>
-
-      <ProductCard />
+      <ProductCard
+        isOwner={isOwner}
+        manufacturer={props.manufacturer}
+        model={props.model}
+        mfg={props.mfg}
+        price={props.price}
+        mrp={props.mrp}
+        forSale={props.forSale}
+        setPrice={newPrice => {
+          setPrice(newPrice);
+        }}
+        setSale={flag => {
+          setSale(flag);
+        }}
+      />
       <ol class='relative border-l border-gray-200 dark:border-gray-700'>
         <li class='mb-10 ml-4'>
           <div class='absolute w-3 h-3 bg-gray-200 rounded-full -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700'></div>
@@ -76,12 +131,11 @@ export async function getStaticProps(context) {
   const productId = context.params.productId;
   // now fetch all product data and pass it as props
   const contract = await getServerContract();
-  const res = await contract.methods.products(productId).call();
-
-  console.log(res);
+  const productDetails = await contract.methods.products(productId).call();
+  console.log('Product Details : ', productDetails);
 
   return {
-    props: { ...res },
+    props: { ...productDetails },
     revalidate: 1,
   };
 }
