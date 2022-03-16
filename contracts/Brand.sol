@@ -10,7 +10,7 @@ contract Brand {
 
     mapping(address => Company) public brands;
     mapping(string => bool) private exists;
-    address[] brandOwners;
+    address[] public brandOwners;
 
     event BrandCreated(address _owner, string _brandName);
     event BrandDeleted(address _owner, string _brandName);

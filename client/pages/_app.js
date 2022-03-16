@@ -8,9 +8,7 @@ import Message from '../components/message';
 import Navbar from '../components/navbar';
 
 function MyApp({ Component, pageProps }) {
-  const [web3, setWeb3] = useState();
-  const [accounts, setAccounts] = useState();
-  const [contract, setContract] = useState();
+  const [newProps, setNewProps] = useState(pageProps);
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -23,26 +21,31 @@ function MyApp({ Component, pageProps }) {
       console.log(tempweb3);
       console.log(tempAccounts);
       console.log(tempContract);
-      setWeb3(tempweb3);
-      setAccounts(tempAccounts);
-      setContract(tempContract);
+      setNewProps(oldProps => ({
+        ...oldProps,
+        web3: tempweb3,
+        accounts: tempAccounts,
+        contract: tempContract,
+      }));
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
       setMsg(error.message);
     }
-  }, []);
+  }, [setLoading, setMsg, setNewProps]);
 
-  useEffect(setWeb3State, []);
+  useEffect(setWeb3State, [setWeb3State]);
 
-  const newProps = { ...pageProps, web3, accounts, contract };
   if (loading) return <Loading />;
   if (msg)
     return (
       <Message msg='Failed to load web3, accounts, or contract. Check console for details.' />
     );
-  return web3 && accounts && accounts.length > 0 && contract ? (
+  return newProps.web3 &&
+    newProps.accounts &&
+    newProps.accounts.length > 0 &&
+    newProps.contract ? (
     <>
       <Navbar />
       <Component {...newProps} />

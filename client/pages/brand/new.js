@@ -9,11 +9,17 @@ function NewBrandPage(props) {
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState();
-
+  console.log('PROPS IN NEW BRAND', props);
   const createNewBrand = useCallback(async () => {
+    console.log('Use callback props : ', props);
     try {
+      console.log('Use callback props : ', props);
+      console.log('Use callback props : ', brandName);
+      console.log('Use callback props : ', url);
+
       setLoading(true);
       const { accounts, contract } = props;
+      console.log(accounts);
       await contract.methods
         .createBrand(brandName, url)
         .send({ from: accounts[0] });
@@ -24,7 +30,7 @@ function NewBrandPage(props) {
       setMsg(err.message);
       setLoading(false);
     }
-  }, [brandName]);
+  }, [brandName, url, props]);
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
   return (
