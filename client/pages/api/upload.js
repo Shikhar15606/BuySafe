@@ -11,24 +11,28 @@ export const config = {
 
 export default async (req, res) => {
   // parse form with a Promise wrapper
-  const data = await new Promise((resolve, reject) => {
-    const form = new IncomingForm();
+  try {
+    const data = await new Promise((resolve, reject) => {
+      const form = new IncomingForm();
 
-    form.parse(req, (err, fields, files) => {
-      if (err) return reject(err);
-      resolve({ fields, files });
+      form.parse(req, (err, fields, files) => {
+        if (err) return reject(err);
+        resolve({ fields, files });
+      });
     });
-  });
 
-  const path = data.files.selectedFile.filepath;
-  const name = path.slice(5);
-  console.log(path, name);
-  const files = await getFilesFromPath(data.files.selectedFile.filepath);
-  // read file from the temporary path
-  const cid = await client.put(files, {
-    name: name,
-    maxRetries: 3,
-  });
-  console.log(cid);
-  res.status(200).json({ url: `https://${cid}.ipfs.dweb.link/${name}` });
+    const path = data.files.selectedFile.filepath;
+    const name = path.slice(5);
+    console.log(path, name);
+    const files = await getFilesFromPath(data.files.selectedFile.filepath);
+    // read file from the temporary path
+    const cid = await client.put(files, {
+      name: name,
+      maxRetries: 3,
+    });
+    console.log(cid);
+    res.status(200).json({ url: `https://${cid}.ipfs.dweb.link/${name}` });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };

@@ -8,12 +8,15 @@ function NewBrandPage(props) {
   const [brandName, setBrandName] = useState('');
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState();
 
   const createNewBrand = useCallback(async () => {
     try {
       setLoading(true);
       const { accounts, contract } = props;
-      await contract.methods.createBrand(brandName).send({ from: accounts[0] });
+      await contract.methods
+        .createBrand(brandName, url)
+        .send({ from: accounts[0] });
       setMsg('Brand Successfully Created');
       setLoading(false);
     } catch (err) {
@@ -55,11 +58,12 @@ function NewBrandPage(props) {
               />
             </div>
           </div>
-          <Upload />
+          <Upload setUrl={setUrl} url={url} setMsg={setMsg} />
           <div>
             <button
               className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
               onClick={createNewBrand}
+              disabled={!url || !(brandName.length > 0)}
             >
               <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
                 <PlusCircleIcon
