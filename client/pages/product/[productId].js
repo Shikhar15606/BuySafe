@@ -14,10 +14,13 @@ function ProductDetailPage(props) {
   const [loading, setLoading] = useState(false);
 
   const refreshData = useCallback(() => {
+    console.log('refreshing data');
     router.replace(router.asPath);
   }, []);
 
   useEffect(() => {
+    console.log('Props arrived', props);
+    console.log('Props changed loding false');
     setLoading(false);
   }, [props]);
 
@@ -83,6 +86,8 @@ function ProductDetailPage(props) {
         price={props.price}
         mrp={props.mrp}
         forSale={props.forSale}
+        brandName={props.brandName}
+        reports={props.reports}
         setPrice={newPrice => {
           setPrice(newPrice);
         }}
@@ -90,6 +95,7 @@ function ProductDetailPage(props) {
           setSale(flag);
         }}
         buy={buy}
+        productId={productId}
       />
       <ol class='relative border-l border-gray-200 dark:border-gray-700'>
         <li class='mb-10 ml-4'>
@@ -149,8 +155,10 @@ export async function getStaticProps(context) {
   console.log('Product Details : ', productDetails);
   const owner = await contract.methods.productToOwner(productId).call();
   console.log('Product Owner : ', owner);
+  let brandDetails = await contract.methods.brands(owner).call();
+  console.log(brandDetails);
   return {
-    props: { ...productDetails, owner },
+    props: { ...productDetails, owner, ...brandDetails },
     revalidate: 1,
   };
 }

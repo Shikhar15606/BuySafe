@@ -8,10 +8,12 @@ import Message from '../components/message';
 import Navbar from '../components/navbar';
 
 function MyApp({ Component, pageProps }) {
-  const [newProps, setNewProps] = useState(pageProps);
+  const [newProps, setNewProps] = useState({});
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
 
+  console.log('Page props in app.js', pageProps);
+  console.log('New props in app.js', newProps);
   const setWeb3State = useCallback(async () => {
     setLoading(true);
     try {
@@ -42,13 +44,15 @@ function MyApp({ Component, pageProps }) {
     return (
       <Message msg='Failed to load web3, accounts, or contract. Check console for details.' />
     );
+
+  const mergedProps = { ...newProps, ...pageProps };
   return newProps.web3 &&
     newProps.accounts &&
     newProps.accounts.length > 0 &&
     newProps.contract ? (
     <>
       <Navbar />
-      <Component {...newProps} />
+      <Component {...mergedProps} />
     </>
   ) : (
     <>

@@ -1,19 +1,33 @@
 import React from 'react';
 import BrandCard from '../../components/brandCard';
 import getServerContract from '../../lib/getServerContract';
+import { useCallback, useState } from 'react';
+import Loading from '../../components/loading';
+import Message from '../../components/message';
 
 function BrandPage(props) {
+  const [msg, setMsg] = useState();
+  const [loading, setLoading] = useState(false);
+
+  if (loading) return <Loading />;
+  if (msg) return <Message msg={msg} />;
   return (
     <div>
       <h1>Brands List Page</h1>
       <p>list all brands here</p>
-      {props.brandList?.map(brandDetail => (
-        <BrandCard
-          accounts={props.accounts}
-          contract={props.contract}
-          brandDetail={brandDetail}
-        />
-      ))}
+      <div className='flex flex-1 flex-wrap items-center justify-evenly gap-4'>
+        {props.brandList.map(brandDetail => (
+          <BrandCard
+            accounts={props.accounts}
+            contract={props.contract}
+            brandDetail={brandDetail}
+            msg={msg}
+            setMsg={setMsg}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        ))}
+      </div>
     </div>
   );
 }

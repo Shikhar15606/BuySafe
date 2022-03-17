@@ -8,12 +8,20 @@ const ProductCard = props => {
     <div>
       <div class='p-4 max-w-sm bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700'>
         <h5 class='mb-4 text-xl font-medium text-gray-500 dark:text-gray-400'>
-          Token #1
+          {`Token #${props.productId}`}
         </h5>
         <ul role='list' class='my-7 space-y-5'>
           <VerifiedItem
-            isVerified={true}
-            msg={true ? 'Verified Manufacturer' : 'Unverified Manufacturer'}
+            isVerified={
+              parseInt(props.reports) <
+              parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
+            }
+            msg={
+              parseInt(props.reports) <
+              parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
+                ? 'Verified Manufacturer'
+                : 'Unverified Manufacturer'
+            }
           />
           <VerifiedItem
             isVerified={props.forSale}
@@ -24,7 +32,7 @@ const ProductCard = props => {
         </ul>
         <div class='flow-root'>
           <ul role='list' class='divide-y divide-gray-200 dark:divide-gray-700'>
-            <DetailItem field={'Brand'} value={'Nike'} />
+            <DetailItem field={'Brand'} value={props.brandName} />
             <DetailItem field={'Model'} value={props.model} />
             <DetailItem
               field={'Mfg Date'}
