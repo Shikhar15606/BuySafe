@@ -65,7 +65,7 @@ function NewProductPage(props) {
             <div className='flex flex-1 justify-center'>
               <QRCode
                 id={`${process.env.NEXT_PUBLIC_APP_URL}/product/${productId}`}
-                value={`/product/${productId}`}
+                value={`${process.env.NEXT_PUBLIC_APP_URL}/product/${productId}`}
                 size={290}
                 level={'H'}
                 includeMargin={true}

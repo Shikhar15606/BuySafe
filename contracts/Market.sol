@@ -8,10 +8,11 @@ contract Market is ProductFactory {
     event saleStarted(uint256 _productId);
     event saleClosed(uint256 _productId);
     event buySuccess(
-        uint256 _productId,
+        uint256 indexed _productId,
         address _from,
         address _to,
-        uint256 _price
+        uint256 _price,
+        uint256 _time
     );
 
     modifier hasEnoughMoney(uint256 _productId) {
@@ -76,7 +77,8 @@ contract Market is ProductFactory {
             _productId,
             _seller,
             _buyer,
-            products[_productId].price
+            products[_productId].price,
+            block.timestamp
         );
     }
 }

@@ -4,6 +4,7 @@ import getServerContract from '../../lib/getServerContract';
 import ProductCard from '../../components/productCard';
 import Loading from '../../components/loading';
 import Message from '../../components/message';
+import TimeLine from '../../components/timeline';
 
 function ProductDetailPage(props) {
   const router = useRouter();
@@ -78,58 +79,33 @@ function ProductDetailPage(props) {
   if (msg) return <Message msg={msg} />;
   return (
     <div>
-      <ProductCard
-        isOwner={isOwner}
-        manufacturer={props.manufacturer}
-        model={props.model}
-        mfg={props.mfg}
-        price={props.price}
-        mrp={props.mrp}
-        forSale={props.forSale}
-        brandName={props.brandName}
-        reports={props.reports}
-        setPrice={newPrice => {
-          setPrice(newPrice);
-        }}
-        setSale={flag => {
-          setSale(flag);
-        }}
-        buy={buy}
-        productId={productId}
-      />
-      <ol class='relative border-l border-gray-200 dark:border-gray-700'>
-        <li class='mb-10 ml-4'>
-          <div class='absolute w-3 h-3 bg-gray-200 rounded-full -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700'></div>
-          <time class='mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500'>
-            February 2022
-          </time>
-          <h3 class='text-lg font-semibold text-gray-900 dark:text-white'>
-            Application UI code in Tailwind CSS
-          </h3>
-          <p class='mb-4 text-base font-normal text-gray-500 dark:text-gray-400'>
-            Get access to over 20+ pages including a dashboard layout, charts,
-            kanban board, calendar, and pre-order E-commerce & Marketing pages.
-          </p>
-          <a
-            href='#'
-            class='inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
-          >
-            Learn more{' '}
-            <svg
-              class='ml-2 w-3 h-3'
-              fill='currentColor'
-              viewBox='0 0 20 20'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                d='M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z'
-                clip-rule='evenodd'
-              ></path>
-            </svg>
-          </a>
-        </li>
-      </ol>
+      <div className='flex flex-1 flex-wrap justify-start items-start'>
+        <ProductCard
+          isOwner={isOwner}
+          manufacturer={props.manufacturer}
+          model={props.model}
+          mfg={props.mfg}
+          price={props.price}
+          mrp={props.mrp}
+          forSale={props.forSale}
+          brandName={props.brandName}
+          reports={props.reports}
+          setPrice={newPrice => {
+            setPrice(newPrice);
+          }}
+          setSale={flag => {
+            setSale(flag);
+          }}
+          buy={buy}
+          productId={productId}
+        />
+        <div className='m-4 p-4 overflow-hidden'>
+          <h2 className='my-6 mx-6 text-3xl font-extrabold text-gray-900 text-left'>
+            TimeLine
+          </h2>
+          <TimeLine history={props.history} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -157,8 +133,29 @@ export async function getStaticProps(context) {
   console.log('Product Owner : ', owner);
   let brandDetails = await contract.methods.brands(owner).call();
   console.log(brandDetails);
+  // now fectching transaction details
+  let history = [];
+  const createEvents = await contract.getPastEvents('ProductCreated', {
+    filter: { _productId: productId },
+    fromBlock: 0,
+    toBlock: 'latest',
+  });
+  const manufactureEvent = createEvents[0];
+  history.push({ ...manufactureEvent.returnValues });
+  const buyEvents = await contract.getPastEvents('buySuccess', {
+    filter: { _productId: productId },
+    fromBlock: 0,
+    toBlock: 'latest',
+  });
+  console.log('Create Events : ', createEvents);
+  console.log('Buy Events : ', buyEvents);
+
+  buyEvents.forEach(buyEvent => {
+    history.push({ ...buyEvent.returnValues });
+  });
+
   return {
-    props: { ...productDetails, owner, ...brandDetails },
+    props: { ...productDetails, owner, ...brandDetails, history },
     revalidate: 1,
   };
 }

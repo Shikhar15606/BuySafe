@@ -5,8 +5,8 @@ import { useState } from 'react';
 const ProductCard = props => {
   const [newPrice, setNewPrice] = useState();
   return (
-    <div>
-      <div class='p-4 max-w-sm bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700'>
+    <div className='m-0 w-96 inline-block md:m-6'>
+      <div class='p-4 bg-white rounded-lg border shadow-lg sm:p-8'>
         <h5 class='mb-4 text-xl font-medium text-gray-500 dark:text-gray-400'>
           {`Token #${props.productId}`}
         </h5>

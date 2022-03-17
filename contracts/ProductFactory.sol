@@ -16,7 +16,11 @@ contract ProductFactory is Report {
     Product[] public products;
     mapping(uint256 => address) public productToOwner;
 
-    event ProductCreated(address _manufacturer, uint256 _productId);
+    event ProductCreated(
+        address _manufacturer,
+        uint256 indexed _productId,
+        uint256 _time
+    );
 
     modifier onlyProductOwner(uint256 _productId) {
         require(
@@ -52,7 +56,7 @@ contract ProductFactory is Report {
         uint256 _productId = products.length - 1;
         productToOwner[_productId] = msg.sender;
         userBrand[msg.sender][msg.sender].productCount++;
-        emit ProductCreated(msg.sender, _productId);
+        emit ProductCreated(msg.sender, _productId, block.timestamp);
     }
 
     function productCount() public view returns (uint256) {

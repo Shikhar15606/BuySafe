@@ -1,13 +1,16 @@
 import React from 'react';
 import BrandCard from '../../components/brandCard';
 import getServerContract from '../../lib/getServerContract';
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loading from '../../components/loading';
 import Message from '../../components/message';
 
 function BrandPage(props) {
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(false);
+  }, [props]);
 
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
