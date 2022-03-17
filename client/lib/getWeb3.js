@@ -3,7 +3,7 @@ import Web3 from 'web3';
 const resolveWeb3 = resolve => {
   let { web3 } = window;
   const alreadyInjected = typeof web3 !== 'undefined'; // i.e. Mist/Metamask
-  const localProvider = process.env.BLOCKCHAIN_URL;
+  const localProvider = process.env.NEXT_PUBLIC_BLOCKCHAIN_URL;
 
   if (alreadyInjected) {
     console.log(`Injected web3 detected.`);

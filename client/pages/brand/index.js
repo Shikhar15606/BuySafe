@@ -7,8 +7,12 @@ function BrandPage(props) {
     <div>
       <h1>Brands List Page</h1>
       <p>list all brands here</p>
-      {props.brandList.map(brandDetail => (
-        <BrandCard brandDetail={brandDetail} />
+      {props.brandList?.map(brandDetail => (
+        <BrandCard
+          accounts={props.accounts}
+          contract={props.contract}
+          brandDetail={brandDetail}
+        />
       ))}
     </div>
   );
@@ -23,7 +27,7 @@ export async function getStaticProps() {
   for (let i = 0; i < brandCount; i++) {
     let brandOwner = await contract.methods.brandOwners(i).call();
     let brandDetails = await contract.methods.brands(brandOwner).call();
-    brandList.push({ ...brandDetails });
+    brandList.push({ ...brandDetails, brandOwner });
   }
   console.log(brandList);
   return {

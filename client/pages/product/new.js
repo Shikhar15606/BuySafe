@@ -42,7 +42,7 @@ function NewProductPage(props) {
 
   const downloadQR = useCallback(() => {
     const canvas = document.getElementById(
-      `${process.env.APP_URL}/product/${productId}`
+      `${process.env.NEXT_PUBLIC_APP_URL}/product/${productId}`
     );
     const pngUrl = canvas
       .toDataURL('image/png')
@@ -64,7 +64,7 @@ function NewProductPage(props) {
           <div className='max-w-md w-full space-y-8'>
             <div className='flex flex-1 justify-center'>
               <QRCode
-                id={`${process.env.APP_URL}/product/${productId}`}
+                id={`${process.env.NEXT_PUBLIC_APP_URL}/product/${productId}`}
                 value={`/product/${productId}`}
                 size={290}
                 level={'H'}

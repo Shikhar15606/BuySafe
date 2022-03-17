@@ -1,10 +1,34 @@
+import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import Loading from './loading';
+import Message from './message';
+
 const BrandCard = props => {
-  console.log(
-    props.brandDetail.reports,
-    process.env.REPORT_LIMIT,
-    typeof props.brandDetail.reports,
-    typeof process.env.REPORT_LIMIT
-  );
+  const router = useRouter();
+  const [msg, setMsg] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const refreshData = useCallback(() => {
+    router.replace(router.asPath);
+  }, []);
+
+  const reportHandler = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { accounts, contract } = props;
+      await contract.methods
+        .reportBrand(props.brandDetail.brandOwner)
+        .send({ from: accounts[0] });
+      refreshData();
+    } catch (err) {
+      console.log(err);
+      setMsg(err.message);
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) return <Loading />;
+  if (msg) return <Message msg={msg} />;
   return (
     <div class='max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700'>
       <img class='rounded-t-lg' src={props.brandDetail.logo} alt='' />
@@ -14,7 +38,7 @@ const BrandCard = props => {
             {props.brandDetail.brandName}
           </h5>
           {parseInt(props.brandDetail.reports) <
-          parseInt(process.env.REPORT_LIMIT) ? (
+          parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT) ? (
             <svg
               class='flex-shrink-0 w-5 h-5 text-green-600'
               fill='currentColor'
@@ -45,8 +69,8 @@ const BrandCard = props => {
         <p class='mb-3 font-normal text-gray-700 dark:text-gray-400'>
           {`Reported by ${props.brandDetail.reports} People`}
         </p>
-        <a
-          href='#'
+        <button
+          onClick={reportHandler}
           class='inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
           Report
@@ -62,7 +86,7 @@ const BrandCard = props => {
               clip-rule='evenodd'
             ></path>
           </svg>
-        </a>
+        </button>
       </div>
     </div>
   );
