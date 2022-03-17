@@ -46,20 +46,27 @@ function MyApp({ Component, pageProps }) {
     );
 
   const mergedProps = { ...newProps, ...pageProps };
-  return newProps.web3 &&
-    newProps.accounts &&
-    newProps.accounts.length > 0 &&
-    newProps.contract ? (
+  console.log('Merger Props : ', mergedProps);
+  return (
     <>
       <Navbar />
       <Component {...mergedProps} />
     </>
-  ) : (
-    <>
-      <Navbar />
-      <Message msg='Connect accounts with metamask' />
-    </>
   );
+  // newProps.web3 &&
+  //   newProps.accounts &&
+  //   newProps.accounts.length > 0 &&
+  //   newProps.contract ? (
+  //   <>
+  //     <Navbar />
+  //     <Component {...mergedProps} />
+  //   </>
+  // ) : (
+  //   <>
+  //     <Navbar />
+  //     <Message msg='Connect accounts with metamask' />
+  //   </>
+  // );
 }
 
 export default MyApp;
