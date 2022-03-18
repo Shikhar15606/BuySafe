@@ -36,21 +36,29 @@ function BrandPage(props) {
 }
 export async function getStaticProps() {
   // now fetch all brands data and pass it as props
-  const contract = await getServerContract();
-  const brandCount = await contract.methods.getBrandsLength().call();
-  console.log(brandCount);
+  try {
+    const contract = await getServerContract();
+    const brandCount = await contract.methods.getBrandsLength().call();
+    console.log(brandCount);
 
-  let brandList = [];
-  for (let i = 0; i < brandCount; i++) {
-    let brandOwner = await contract.methods.brandOwners(i).call();
-    let brandDetails = await contract.methods.brands(brandOwner).call();
-    brandList.push({ ...brandDetails, brandOwner });
+    let brandList = [];
+    for (let i = 0; i < brandCount; i++) {
+      let brandOwner = await contract.methods.brandOwners(i).call();
+      let brandDetails = await contract.methods.brands(brandOwner).call();
+      brandList.push({ ...brandDetails, brandOwner });
+    }
+    console.log(brandList);
+    return {
+      props: { brandList },
+      revalidate: 1,
+    };
+  } catch (err) {
+    console.log('Error at build, I cant do much about it : ', err);
+    return {
+      props: {},
+      revalidate: 1,
+    };
   }
-  console.log(brandList);
-  return {
-    props: { brandList },
-    revalidate: 1,
-  };
 }
 
 export default BrandPage;

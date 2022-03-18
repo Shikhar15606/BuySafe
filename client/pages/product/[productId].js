@@ -111,53 +111,67 @@ function ProductDetailPage(props) {
 }
 
 export async function getStaticPaths() {
-  const contract = await getServerContract();
-  const res = await contract.methods.productCount().call();
-  console.log(res);
-  let paths = [];
-  for (let i = 0; i < res; i++) {
-    paths.push({
-      params: { productId: i.toString() },
-    });
+  try {
+    const contract = await getServerContract();
+    const res = await contract.methods.productCount().call();
+    console.log(res);
+    let paths = [];
+    for (let i = 0; i < res; i++) {
+      paths.push({
+        params: { productId: i.toString() },
+      });
+    }
+    return { paths, fallback: false };
+  } catch (err) {
+    console.log('Error at build, I cant do much about it : ', err);
+    return {
+      props: {},
+      revalidate: 1,
+    };
   }
-  return { paths, fallback: false };
 }
 
 export async function getStaticProps(context) {
-  const productId = context.params.productId;
-  // now fetch all product data and pass it as props
-  const contract = await getServerContract();
-  const productDetails = await contract.methods.products(productId).call();
-  console.log('Product Details : ', productDetails);
-  const owner = await contract.methods.productToOwner(productId).call();
-  console.log('Product Owner : ', owner);
-  let brandDetails = await contract.methods.brands(owner).call();
-  console.log(brandDetails);
-  // now fectching transaction details
-  let history = [];
-  const createEvents = await contract.getPastEvents('ProductCreated', {
-    filter: { _productId: productId },
-    fromBlock: 0,
-    toBlock: 'latest',
-  });
-  const manufactureEvent = createEvents[0];
-  history.push({ ...manufactureEvent.returnValues });
-  const buyEvents = await contract.getPastEvents('buySuccess', {
-    filter: { _productId: productId },
-    fromBlock: 0,
-    toBlock: 'latest',
-  });
-  console.log('Create Events : ', createEvents);
-  console.log('Buy Events : ', buyEvents);
-
-  buyEvents.forEach(buyEvent => {
-    history.push({ ...buyEvent.returnValues });
-  });
-
-  return {
-    props: { ...productDetails, owner, ...brandDetails, history },
-    revalidate: 1,
-  };
+  try {
+    const productId = context.params.productId;
+    // now fetch all product data and pass it as props
+    const contract = await getServerContract();
+    const productDetails = await contract.methods.products(productId).call();
+    console.log('Product Details : ', productDetails);
+    const owner = await contract.methods.productToOwner(productId).call();
+    console.log('Product Owner : ', owner);
+    let brandDetails = await contract.methods.brands(owner).call();
+    console.log(brandDetails);
+    // now fectching transaction details
+    let history = [];
+    const createEvents = await contract.getPastEvents('ProductCreated', {
+      filter: { _productId: productId },
+      fromBlock: 0,
+      toBlock: 'latest',
+    });
+    const manufactureEvent = createEvents[0];
+    history.push({ ...manufactureEvent.returnValues });
+    const buyEvents = await contract.getPastEvents('buySuccess', {
+      filter: { _productId: productId },
+      fromBlock: 0,
+      toBlock: 'latest',
+    });
+    console.log('Create Events : ', createEvents);
+    console.log('Buy Events : ', buyEvents);
+    buyEvents.forEach(buyEvent => {
+      history.push({ ...buyEvent.returnValues });
+    });
+    return {
+      props: { ...productDetails, owner, ...brandDetails, history },
+      revalidate: 1,
+    };
+  } catch (err) {
+    console.log('Error at build, I cant do much about it : ', err);
+    return {
+      props: {},
+      revalidate: 1,
+    };
+  }
 }
 
 export default ProductDetailPage;
