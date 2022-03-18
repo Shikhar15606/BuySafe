@@ -1,9 +1,12 @@
 import VerifiedItem from './verifiedItem';
 import DetailItem from './detailItem';
 import { useState } from 'react';
+import Metamask from './metamask';
 
 const ProductCard = props => {
   const [newPrice, setNewPrice] = useState();
+  const [open, setOpen] = useState(false);
+
   return (
     <div className='m-0 w-96 inline-block md:m-6'>
       <div class='p-4 bg-white rounded-lg border shadow-lg sm:p-8'>
@@ -88,15 +91,31 @@ const ProductCard = props => {
             )}
           </>
         ) : (
-          props.forSale && (
-            <button
-              type='button'
-              class='mt-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center'
-              onClick={props.buy}
-            >
-              Buy
-            </button>
-          )
+          <>
+            {props.forSale && props.metamaskConnected && (
+              <button
+                type='button'
+                class='mt-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center'
+                onClick={props.buy}
+              >
+                Buy
+              </button>
+            )}
+            {!props.metamaskConnected && (
+              <>
+                <Metamask open={open} setOpen={setOpen} />
+                <button
+                  type='button'
+                  class='mt-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center'
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  Buy
+                </button>
+              </>
+            )}
+          </>
         )}
       </div>
     </div>

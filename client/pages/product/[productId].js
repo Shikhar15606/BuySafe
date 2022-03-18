@@ -9,7 +9,13 @@ import TimeLine from '../../components/timeline';
 function ProductDetailPage(props) {
   const router = useRouter();
   const productId = router.query.productId;
-  const isOwner = props.accounts[0] == props.owner;
+  let isOwner = false,
+    metamaskConnected = false;
+
+  if (props.accounts && props.accounts.length > 0) {
+    isOwner = props.accounts[0] == props.owner;
+    metamaskConnected = true;
+  }
 
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
@@ -98,6 +104,7 @@ function ProductDetailPage(props) {
           }}
           buy={buy}
           productId={productId}
+          metamaskConnected={metamaskConnected}
         />
         <div className='m-4 p-4 overflow-hidden'>
           <h2 className='my-6 mx-6 text-3xl font-extrabold text-gray-900 text-left'>
@@ -116,7 +123,7 @@ export async function getStaticPaths() {
     const res = await contract.methods.productCount().call();
     console.log(res);
     let paths = [];
-    for (let i = 0; i < res; i++) {
+    for (let i = 0; i < parseInt(res); i++) {
       paths.push({
         params: { productId: i.toString() },
       });

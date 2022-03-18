@@ -77,12 +77,6 @@ const Navbar = props => {
                   </div>
                 </div>
               </div>
-
-              <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-                <button className='justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-                  Connect Wallet
-                </button>
-              </div>
             </div>
           </div>
 

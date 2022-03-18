@@ -20,6 +20,10 @@ function MyApp({ Component, pageProps }) {
       const tempweb3 = await getWeb3();
       const tempAccounts = await tempweb3.eth.getAccounts();
       const tempContract = await getContract(tempweb3, contractDefinition);
+
+      // to simulate a silly user (just for development)
+      // const tempweb3 = null, tempAccounts = null, tempContract = null;
+
       console.log(tempweb3);
       console.log(tempAccounts);
       console.log(tempContract);
