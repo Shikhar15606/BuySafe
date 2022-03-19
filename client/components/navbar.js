@@ -15,7 +15,8 @@ const Navbar = props => {
   const [navigation, setNavigation] = useState([
     { name: 'Home', href: '/', current: false },
     { name: 'Brands', href: '/brand', current: false },
-    { name: 'Products', href: '/product/new', current: false },
+    { name: 'Mint', href: '/product/new', current: false },
+    { name: 'Create', href: '/brand/new', current: false },
   ]);
 
   useEffect(() => {

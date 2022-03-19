@@ -39,10 +39,10 @@ function NewBrandPage(props) {
         <div>
           <img className='mx-auto h-12 w-auto' src='/logo.svg' alt='BuySafe' />
           <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
-            Create New Brand Page
+            Create your own Brand
           </h2>
           <p className='font-medium mt-2 text-center text-sm text-indigo-600'>
-            Enter your Brand Name{' '}
+            The brand name must be unique, and you can own only one brand{' '}
           </p>
         </div>
         <div className='mt-8 space-y-9'>

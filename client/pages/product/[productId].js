@@ -85,7 +85,7 @@ function ProductDetailPage(props) {
   if (msg) return <Message msg={msg} />;
   return (
     <div>
-      <div className='flex flex-1 flex-wrap justify-start items-start'>
+      <div className='flex flex-1 flex-wrap justify-start items-start md:mx-14 md:pt-8'>
         <ProductCard
           isOwner={isOwner}
           manufacturer={props.manufacturer}
@@ -106,7 +106,7 @@ function ProductDetailPage(props) {
           productId={productId}
           metamaskConnected={metamaskConnected}
         />
-        <div className='m-4 p-4 overflow-hidden'>
+        <div className='m-4 p-4 overflow-hidden flex-grow'>
           <h2 className='my-6 mx-6 text-3xl font-extrabold text-gray-900 text-left'>
             TimeLine
           </h2>

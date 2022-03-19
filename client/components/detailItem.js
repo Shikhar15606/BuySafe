@@ -7,7 +7,7 @@ const DetailItem = props => {
             {props.field}
           </p>
         </div>
-        <div class='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
+        <div class='inline-flex items-center text-base font-semibold text-indigo-600 dark:text-white'>
           {props.value}
         </div>
       </div>

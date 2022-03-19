@@ -22,13 +22,12 @@ const TimeLine = props => {
         <h3 class='flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white'>
           Created by {`${props.history[0]._manufacturer}`}
         </h3>
-        <time class='block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500'>
+        <time class='block mb-2 text-sm font-medium leading-none text-indigo-600'>
           {`On ${new Date(props.history[0]._time * 1000).toLocaleDateString(
             'en-US',
             options
           )}`}
         </time>
-        <p class='mb-4 text-base font-normal text-gray-500 dark:text-gray-400'></p>
       </li>
       {props.history.map(
         (transaction, i) =>
@@ -51,7 +50,7 @@ const TimeLine = props => {
               <h3 class='flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white'>
                 Purchased by {`${transaction._to} at ${transaction._price} Wei`}
               </h3>
-              <time class='block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500'>
+              <time class='block mb-2 text-sm font-medium leading-none text-indigo-600'>
                 {`On ${new Date(transaction._time * 1000).toLocaleDateString(
                   'en-US',
                   options

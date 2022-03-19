@@ -15,21 +15,32 @@ function BrandPage(props) {
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
   return (
-    <div>
-      <h1>Brands List Page</h1>
-      <p>list all brands here</p>
-      <div className='flex flex-1 flex-wrap items-center justify-evenly gap-4'>
-        {props.brandList.map(brandDetail => (
-          <BrandCard
-            accounts={props.accounts}
-            contract={props.contract}
-            brandDetail={brandDetail}
-            msg={msg}
-            setMsg={setMsg}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        ))}
+    <div className='py-12 bg-white'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='lg:text-center'>
+          <h2 className='text-base text-indigo-600 font-semibold tracking-wide uppercase'>
+            Power Decentralized
+          </h2>
+          <p className='mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl'>
+            Every Vote Counts
+          </p>
+          <p className='mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto'>
+            You can report the brand if you felt it's product was not genuine.
+          </p>
+        </div>
+        <div className='flex flex-1 flex-wrap items-center justify-evenly gap-4'>
+          {props.brandList.map(brandDetail => (
+            <BrandCard
+              accounts={props.accounts}
+              contract={props.contract}
+              brandDetail={brandDetail}
+              msg={msg}
+              setMsg={setMsg}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

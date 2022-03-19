@@ -6,13 +6,12 @@ import Metamask from './metamask';
 const ProductCard = props => {
   const [newPrice, setNewPrice] = useState();
   const [open, setOpen] = useState(false);
+  let options = { year: 'numeric', month: 'long', day: 'numeric' };
 
   return (
-    <div className='m-0 w-96 inline-block md:m-6'>
+    <div className='m-0 w-96 inline-block sm:m-6 flex-grow'>
       <div class='p-4 bg-white rounded-lg border shadow-lg sm:p-8'>
-        <h5 class='mb-4 text-xl font-medium text-gray-500 dark:text-gray-400'>
-          {`Token #${props.productId}`}
-        </h5>
+        <h5 class='mb-4 text-xl font-medium'>{`Token #${props.productId}`}</h5>
         <ul role='list' class='my-7 space-y-5'>
           <VerifiedItem
             isVerified={
@@ -39,7 +38,10 @@ const ProductCard = props => {
             <DetailItem field={'Model'} value={props.model} />
             <DetailItem
               field={'Mfg Date'}
-              value={new Date(parseInt(props.mfg)).toDateString()}
+              value={new Date(parseInt(props.mfg)).toLocaleDateString(
+                'en-US',
+                options
+              )}
             />
             <DetailItem field={'Price'} value={props.price + ' Wei'} />
             <DetailItem field={'MRP'} value={props.mrp + ' Wei'} />
