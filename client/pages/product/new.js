@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
 import QRCode from 'qrcode.react';
+import Head from 'next/head';
+
 import {
   PlusCircleIcon,
   DocumentDownloadIcon,
@@ -59,6 +61,10 @@ function NewProductPage(props) {
   if (productId)
     return (
       <>
+        <Head>
+          <title>Mint new Product Tokens</title>
+          <meta name='description' content='Mint new Product Tokens'></meta>
+        </Head>
         <Message msg={msg} />
         <div className='flex items-start justify-center pb-12 px-4 sm:px-6 lg:px-8'>
           <div className='max-w-md w-full space-y-8'>
@@ -102,6 +108,10 @@ function NewProductPage(props) {
   if (msg) return <Message msg={msg} />;
   return (
     <>
+      <Head>
+        <title>Mint new Product Tokens</title>
+        <meta name='description' content='Mint new Product Tokens'></meta>
+      </Head>
       <div className='flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-md w-full space-y-8'>
           <div>

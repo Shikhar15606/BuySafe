@@ -4,6 +4,7 @@ import getContract from '../lib/getContract';
 import contractDefinition from '../../build/contracts/Market.json';
 import { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/navbar';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
   const [newProps, setNewProps] = useState({});
@@ -39,6 +40,9 @@ function MyApp({ Component, pageProps }) {
   console.log('Merger Props : ', mergedProps);
   return (
     <>
+      <Head>
+        <link rel='shortcut icon' href='/logo.ico' />
+      </Head>
       <Navbar />
       <Component {...mergedProps} />
     </>

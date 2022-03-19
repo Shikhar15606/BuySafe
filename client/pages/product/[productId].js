@@ -5,6 +5,7 @@ import ProductCard from '../../components/productCard';
 import Loading from '../../components/loading';
 import Message from '../../components/message';
 import TimeLine from '../../components/timeline';
+import Head from 'next/head';
 
 function ProductDetailPage(props) {
   const router = useRouter();
@@ -85,6 +86,13 @@ function ProductDetailPage(props) {
   if (msg) return <Message msg={msg} />;
   return (
     <div>
+      <Head>
+        <title>{`Token ${productId} `}</title>
+        <meta
+          name='description'
+          content={`Details of Token ${productId}`}
+        ></meta>
+      </Head>
       <div className='flex flex-1 flex-wrap justify-start items-start md:mx-14 md:pt-8'>
         <ProductCard
           isOwner={isOwner}
