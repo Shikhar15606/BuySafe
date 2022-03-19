@@ -3,18 +3,14 @@ import getWeb3 from '../lib/getWeb3';
 import getContract from '../lib/getContract';
 import contractDefinition from '../../build/contracts/Market.json';
 import { useState, useEffect, useCallback } from 'react';
-import Loading from '../components/loading';
 import Navbar from '../components/navbar';
 
 function MyApp({ Component, pageProps }) {
   const [newProps, setNewProps] = useState({});
-  const [msg, setMsg] = useState();
-  const [loading, setLoading] = useState(false);
 
   console.log('Page props in app.js', pageProps);
   console.log('New props in app.js', newProps);
   const setWeb3State = useCallback(async () => {
-    setLoading(true);
     try {
       const tempweb3 = await getWeb3();
       const tempAccounts = await tempweb3.eth.getAccounts();
@@ -32,16 +28,13 @@ function MyApp({ Component, pageProps }) {
         accounts: tempAccounts,
         contract: tempContract,
       }));
-      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
-  }, [setLoading, setNewProps]);
+  }, [setNewProps]);
 
   useEffect(setWeb3State, [setWeb3State]);
 
-  if (loading) return <Loading />;
   const mergedProps = { ...newProps, ...pageProps };
   console.log('Merger Props : ', mergedProps);
   return (
@@ -50,20 +43,6 @@ function MyApp({ Component, pageProps }) {
       <Component {...mergedProps} />
     </>
   );
-  // newProps.web3 &&
-  //   newProps.accounts &&
-  //   newProps.accounts.length > 0 &&
-  //   newProps.contract ? (
-  //   <>
-  //     <Navbar />
-  //     <Component {...mergedProps} />
-  //   </>
-  // ) : (
-  //   <>
-  //     <Navbar />
-  //     <Message msg='Connect accounts with metamask' />
-  //   </>
-  // );
 }
 
 export default MyApp;
