@@ -4,9 +4,7 @@ import contractDefinition from '../../build/contracts/Market.json';
 export default async () => {
   try {
     let web3 = new Web3(
-      new Web3.providers.WebsocketProvider(
-        process.env.NEXT_PUBLIC_BLOCKCHAIN_URL
-      )
+      new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_BLOCKCHAIN_URL)
     );
     let networkId = await web3.eth.net.getId();
     let contract = new web3.eth.Contract(

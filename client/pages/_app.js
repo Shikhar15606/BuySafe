@@ -4,7 +4,6 @@ import getContract from '../lib/getContract';
 import contractDefinition from '../../build/contracts/Market.json';
 import { useState, useEffect, useCallback } from 'react';
 import Loading from '../components/loading';
-import Message from '../components/message';
 import Navbar from '../components/navbar';
 
 function MyApp({ Component, pageProps }) {
@@ -37,18 +36,12 @@ function MyApp({ Component, pageProps }) {
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setMsg(error.message);
     }
-  }, [setLoading, setMsg, setNewProps]);
+  }, [setLoading, setNewProps]);
 
   useEffect(setWeb3State, [setWeb3State]);
 
   if (loading) return <Loading />;
-  if (msg)
-    return (
-      <Message msg='Failed to load web3, accounts, or contract. Check console for details.' />
-    );
-
   const mergedProps = { ...newProps, ...pageProps };
   console.log('Merger Props : ', mergedProps);
   return (

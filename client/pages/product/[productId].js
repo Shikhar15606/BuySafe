@@ -131,10 +131,7 @@ export async function getStaticPaths() {
     return { paths, fallback: false };
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
-    return {
-      props: {},
-      revalidate: 1,
-    };
+    return { paths: [], fallback: false };
   }
 }
 

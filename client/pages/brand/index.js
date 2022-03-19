@@ -55,7 +55,7 @@ export async function getStaticProps() {
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
     return {
-      props: {},
+      props: { brandList: [] },
       revalidate: 1,
     };
   }
