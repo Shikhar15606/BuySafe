@@ -1,9 +1,11 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Metamask from '../components/metamask';
 
 const BrandCard = props => {
   const router = useRouter();
   const [btnDetail, setBtnDetail] = useState({ enabled: true, msg: 'Report' });
+  const [open, setOpen] = useState(false);
 
   let metamaskConnected = false;
   if (props.accounts && props.accounts.length > 0) {
@@ -48,12 +50,21 @@ const BrandCard = props => {
     }
   }, [setBtnDetail, metamaskConnected]);
 
+  const showPopup = useCallback(
+    e => {
+      e.preventDefault();
+      setOpen(true);
+    },
+    [setOpen]
+  );
+
   useEffect(() => {
     if (metamaskConnected) checkAccount();
   }, [checkAccount]);
 
   return (
     <div class='bg-white rounded-lg border border-gray-200 shadow-md w-80 m-4'>
+      <Metamask open={open} setOpen={setOpen} />
       <img class='rounded-t-lg' src={props.brandDetail.logo} alt='' />
       <div class='p-5'>
         <div className='flex flex-1 items-center justify-start'>
@@ -94,7 +105,7 @@ const BrandCard = props => {
         </p>
         {btnDetail.enabled ? (
           <button
-            onClick={reportHandler}
+            onClick={metamaskConnected ? reportHandler : showPopup}
             class='inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
           >
             Report

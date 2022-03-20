@@ -3,6 +3,7 @@ import Message from '../../components/message';
 import Loading from '../../components/loading';
 import QRCode from 'qrcode.react';
 import Head from 'next/head';
+import Metamask from '../../components/metamask';
 
 import {
   PlusCircleIcon,
@@ -21,6 +22,8 @@ function NewProductPage(props) {
   const [btnEnabled, setBtnEnabled] = useState(true);
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
   let metamaskConnected = false;
 
   if (props.accounts && props.accounts.length > 0) {
@@ -40,6 +43,14 @@ function NewProductPage(props) {
       }
     }
   }, [metamaskConnected, setBtnEnabled]);
+
+  const showPopup = useCallback(
+    e => {
+      e.preventDefault();
+      setOpen(true);
+    },
+    [setOpen]
+  );
 
   useEffect(() => {
     checkAccount();
@@ -135,6 +146,7 @@ function NewProductPage(props) {
         <title>Mint new Product Tokens</title>
         <meta name='description' content='Mint new Product Tokens'></meta>
       </Head>
+      <Metamask open={open} setOpen={setOpen} />
       <div className='flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-md w-full space-y-8'>
           <div>
@@ -208,10 +220,7 @@ function NewProductPage(props) {
                 {btnEnabled ? (
                   <button
                     className='group relative w-full flex justify-center mt-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={e => {
-                      e.preventDefault();
-                      createNewProduct();
-                    }}
+                    onClick={metamaskConnected ? createNewProduct : showPopup}
                   >
                     <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
                       <PlusCircleIcon

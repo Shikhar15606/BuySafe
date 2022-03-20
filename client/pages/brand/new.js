@@ -3,6 +3,7 @@ import { PlusCircleIcon } from '@heroicons/react/solid';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
 import Upload from '../../components/upload';
+import Metamask from '../../components/metamask';
 import Head from 'next/head';
 
 function NewBrandPage(props) {
@@ -11,6 +12,7 @@ function NewBrandPage(props) {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState();
   const [btnEnabled, setBtnEnabled] = useState(true);
+  const [open, setOpen] = useState(false);
 
   let metamaskConnected = false;
   if (props.accounts && props.accounts.length > 0) {
@@ -47,6 +49,14 @@ function NewBrandPage(props) {
     }
   }, [setBtnEnabled, metamaskConnected]);
 
+  const showPopup = useCallback(
+    e => {
+      e.preventDefault();
+      setOpen(true);
+    },
+    [setOpen]
+  );
+
   useEffect(() => {
     if (metamaskConnected) checkAccount();
   }, [checkAccount]);
@@ -59,6 +69,7 @@ function NewBrandPage(props) {
         <title>Create New Brand</title>
         <meta name='description' content='Create a new brand on Buysafe'></meta>
       </Head>
+      <Metamask open={open} setOpen={setOpen} />
       <div className='flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-md w-full space-y-8'>
           <div>
@@ -98,7 +109,7 @@ function NewBrandPage(props) {
               {btnEnabled ? (
                 <button
                   className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                  onClick={createNewBrand}
+                  onClick={metamaskConnected ? createNewBrand : showPopup}
                   disabled={!url || !(brandName.length > 0)}
                 >
                   <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
