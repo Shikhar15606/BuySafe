@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
 import QRCode from 'qrcode.react';
@@ -18,9 +18,32 @@ function NewProductPage(props) {
   const [price, setPrice] = useState('');
   const [mrp, setMrp] = useState('');
   const [productId, setProductId] = useState();
-
+  const [btnEnabled, setBtnEnabled] = useState(true);
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
+  let metamaskConnected = false;
+
+  if (props.accounts && props.accounts.length > 0) {
+    metamaskConnected = true;
+  }
+  const checkAccount = useCallback(async () => {
+    if (metamaskConnected) {
+      try {
+        const { accounts, contract } = props;
+        const res = await contract.methods.brands(accounts[0]).call();
+        console.log('res', res);
+        if (res.brandName === '') {
+          setBtnEnabled(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [metamaskConnected, setBtnEnabled]);
+
+  useEffect(() => {
+    checkAccount();
+  }, [checkAccount]);
 
   const createNewProduct = useCallback(async () => {
     try {
@@ -182,21 +205,30 @@ function NewProductPage(props) {
                 />
               </div>
               <div>
-                <button
-                  className='group relative w-full flex justify-center mt-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                  onClick={e => {
-                    e.preventDefault();
-                    createNewProduct();
-                  }}
-                >
-                  <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
-                    <PlusCircleIcon
-                      className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
-                      aria-hidden='true'
-                    />
-                  </span>
-                  Create
-                </button>
+                {btnEnabled ? (
+                  <button
+                    className='group relative w-full flex justify-center mt-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                    onClick={e => {
+                      e.preventDefault();
+                      createNewProduct();
+                    }}
+                  >
+                    <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
+                      <PlusCircleIcon
+                        className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
+                        aria-hidden='true'
+                      />
+                    </span>
+                    Mint
+                  </button>
+                ) : (
+                  <button
+                    className='group relative w-full flex justify-center mt-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                    disabled={true}
+                  >
+                    You must have a Brand
+                  </button>
+                )}
               </div>
             </div>
           </form>

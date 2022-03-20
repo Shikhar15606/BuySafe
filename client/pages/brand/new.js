@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import Message from '../../components/message';
 import Loading from '../../components/loading';
@@ -10,14 +10,15 @@ function NewBrandPage(props) {
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState();
-  console.log('PROPS IN NEW BRAND', props);
-  const createNewBrand = useCallback(async () => {
-    console.log('Use callback props : ', props);
-    try {
-      console.log('Use callback props : ', props);
-      console.log('Use callback props : ', brandName);
-      console.log('Use callback props : ', url);
+  const [btnEnabled, setBtnEnabled] = useState(true);
 
+  let metamaskConnected = false;
+  if (props.accounts && props.accounts.length > 0) {
+    metamaskConnected = true;
+  }
+
+  const createNewBrand = useCallback(async () => {
+    try {
       setLoading(true);
       const { accounts, contract } = props;
       console.log(accounts);
@@ -32,6 +33,24 @@ function NewBrandPage(props) {
       setLoading(false);
     }
   }, [brandName, url, props]);
+
+  const checkAccount = useCallback(async () => {
+    try {
+      const { accounts, contract } = props;
+      const res = await contract.methods.brands(accounts[0]).call();
+      console.log('res', res);
+      if (res.brandName != '') {
+        setBtnEnabled(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [setBtnEnabled, metamaskConnected]);
+
+  useEffect(() => {
+    if (metamaskConnected) checkAccount();
+  }, [checkAccount]);
+
   if (loading) return <Loading />;
   if (msg) return <Message msg={msg} />;
   return (
@@ -76,19 +95,28 @@ function NewBrandPage(props) {
             </div>
             <Upload setUrl={setUrl} url={url} setMsg={setMsg} />
             <div>
-              <button
-                className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                onClick={createNewBrand}
-                disabled={!url || !(brandName.length > 0)}
-              >
-                <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
-                  <PlusCircleIcon
-                    className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
-                    aria-hidden='true'
-                  />
-                </span>
-                Create
-              </button>
+              {btnEnabled ? (
+                <button
+                  className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                  onClick={createNewBrand}
+                  disabled={!url || !(brandName.length > 0)}
+                >
+                  <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
+                    <PlusCircleIcon
+                      className='h-5 w-5 text-indigo-500 group-hover:text-indigo-400'
+                      aria-hidden='true'
+                    />
+                  </span>
+                  Create
+                </button>
+              ) : (
+                <button
+                  className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                  disabled={true}
+                >
+                  Brand already created
+                </button>
+              )}
             </div>
           </div>
         </div>

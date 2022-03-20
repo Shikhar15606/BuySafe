@@ -35,4 +35,16 @@ contract Report is Brand {
         brands[_brandOwner].reports--;
         emit brandReportRevoved(_brandOwner, _revokedBy);
     }
+
+    function canIReport(address _brandOwner, address _caller)
+        public
+        view
+        returns (bool canI, string memory reason)
+    {
+        if (userBrand[_caller][_brandOwner].productCount == 0)
+            return (false, 'First Purchase');
+        if (userBrand[_caller][_brandOwner].hasReported == true)
+            return (false, 'Already Reported');
+        return (true, 'Report');
+    }
 }
