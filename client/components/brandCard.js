@@ -34,7 +34,7 @@ const BrandCard = props => {
       if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
         str = err.message.substring(startIndex + 3, endIndex - 1);
       }
-      setMsg(str);
+      console.log(str);
       props.setLoading(false);
     }
   }, []);

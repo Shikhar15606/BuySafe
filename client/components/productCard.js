@@ -7,30 +7,34 @@ const ProductCard = props => {
   const [newPrice, setNewPrice] = useState();
   const [open, setOpen] = useState(false);
   let options = { year: 'numeric', month: 'long', day: 'numeric' };
-
+  console.log(props.forSale);
   return (
     <div className='m-0 w-96 inline-block sm:m-6 flex-grow'>
       <div class='p-4 bg-white rounded-lg border shadow-lg sm:p-8'>
         <h5 class='mb-4 text-xl font-medium'>{`Token #${props.productId}`}</h5>
         <ul role='list' class='my-7 space-y-5'>
-          <VerifiedItem
-            isVerified={
-              parseInt(props.reports) <
-              parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
-            }
-            msg={
-              parseInt(props.reports) <
-              parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
-                ? 'Verified Manufacturer'
-                : 'Unverified Manufacturer'
-            }
-          />
-          <VerifiedItem
-            isVerified={props.forSale}
-            msg={
-              props.forSale ? 'Available for Sale' : 'Not Available for sale'
-            }
-          />
+          <li>
+            <VerifiedItem
+              isVerified={
+                parseInt(props.reports) <
+                parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
+              }
+              msg={
+                parseInt(props.reports) <
+                parseInt(process.env.NEXT_PUBLIC_REPORT_LIMIT)
+                  ? 'Verified Manufacturer'
+                  : 'Unverified Manufacturer'
+              }
+            />
+          </li>
+          <li>
+            <VerifiedItem
+              isVerified={props.forSale}
+              msg={
+                props.forSale ? 'Available for Sale' : 'Not Available for sale'
+              }
+            />
+          </li>
         </ul>
         <div class='flow-root'>
           <ul role='list' class='divide-y divide-gray-200 dark:divide-gray-700'>

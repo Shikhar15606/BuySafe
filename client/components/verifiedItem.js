@@ -1,6 +1,7 @@
 const VerifiedItem = props => {
-  const isVerified = props.isVerified;
-  const msg = props.msg;
+  let isVerified = props.isVerified;
+  let msg = props.msg;
+  console.log(isVerified);
   return (
     <li class='flex space-x-3'>
       {isVerified ? (

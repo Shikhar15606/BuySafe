@@ -187,7 +187,9 @@ export async function getStaticProps(context) {
     console.log('Product Details : ', productDetails);
     const owner = await contract.methods.productToOwner(productId).call();
     console.log('Product Owner : ', owner);
-    let brandDetails = await contract.methods.brands(owner).call();
+    let brandDetails = await contract.methods
+      .brands(productDetails.manufacturer)
+      .call();
     console.log(brandDetails);
     // now fectching transaction details
     let history = [];
