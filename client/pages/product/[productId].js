@@ -32,40 +32,67 @@ function ProductDetailPage(props) {
     setLoading(false);
   }, [props]);
 
-  const setPrice = useCallback(async newPrice => {
-    try {
-      setLoading(true);
-      const { accounts, contract } = props;
-      await contract.methods
-        .setPrice(productId, newPrice)
-        .send({ from: accounts[0] });
-      refreshData();
-    } catch (err) {
-      console.log(err);
-      setMsg(err.message);
-      setLoading(false);
-    }
-  }, []);
+  const setPrice = useCallback(
+    async newPrice => {
+      try {
+        setLoading(true);
+        const { accounts, contract } = props;
+        await contract.methods
+          .setPrice(productId, newPrice)
+          .call({ from: accounts[0] });
+        await contract.methods
+          .setPrice(productId, newPrice)
+          .send({ from: accounts[0] });
+        refreshData();
+      } catch (err) {
+        let str = 'Some Error Occured';
+        const startIndex = err.message.search(':');
+        const endIndex = err.message.search(',');
+        if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+          str = err.message.substring(startIndex + 3, endIndex - 1);
+        }
+        setMsg(str);
+        setLoading(false);
+      }
+    },
+    [props]
+  );
 
-  const setSale = useCallback(async flag => {
-    try {
-      setLoading(true);
-      const { accounts, contract } = props;
-      if (flag)
-        await contract.methods
-          .openForSale(productId)
-          .send({ from: accounts[0] });
-      else
-        await contract.methods
-          .closeForSale(productId)
-          .send({ from: accounts[0] });
-      refreshData();
-    } catch (err) {
-      console.log(err);
-      setMsg(err.message);
-      setLoading(false);
-    }
-  }, []);
+  const setSale = useCallback(
+    async flag => {
+      try {
+        setLoading(true);
+        const { accounts, contract } = props;
+        if (flag) {
+          await contract.methods
+            .openForSale(productId)
+            .call({ from: accounts[0] });
+          await contract.methods
+            .openForSale(productId)
+            .send({ from: accounts[0] });
+        } else {
+          await contract.methods
+            .closeForSale(productId)
+            .call({ from: accounts[0] });
+          await contract.methods
+            .closeForSale(productId)
+            .send({ from: accounts[0] });
+        }
+
+        refreshData();
+      } catch (err) {
+        let str = 'Some Error Occured';
+        const startIndex = err.message.search(':');
+        const endIndex = err.message.search(',');
+        if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+          str = err.message.substring(startIndex + 3, endIndex - 1);
+        }
+        setMsg(str);
+        setLoading(false);
+      }
+    },
+    [props]
+  );
 
   const buy = useCallback(async () => {
     try {
@@ -73,11 +100,19 @@ function ProductDetailPage(props) {
       const { accounts, contract } = props;
       await contract.methods
         .buyProduct(productId)
+        .call({ from: accounts[0], value: props.price });
+      await contract.methods
+        .buyProduct(productId)
         .send({ from: accounts[0], value: props.price });
       refreshData();
     } catch (err) {
-      console.log(err);
-      setMsg(err.message);
+      let str = 'Some Error Occured';
+      const startIndex = err.message.search(':');
+      const endIndex = err.message.search(',');
+      if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+        str = err.message.substring(startIndex + 3, endIndex - 1);
+      }
+      setMsg(str);
       setLoading(false);
     }
   }, [props]);

@@ -61,6 +61,9 @@ function NewProductPage(props) {
       setLoading(true);
       const { accounts, contract } = props;
       console.log(mfg, model, price, mrp);
+      await contract.methods
+        .createProduct(new Date(mfg).getTime(), model, price, mrp)
+        .call({ from: accounts[0] });
       const res = await contract.methods
         .createProduct(new Date(mfg).getTime(), model, price, mrp)
         .send({ from: accounts[0] });
@@ -70,8 +73,13 @@ function NewProductPage(props) {
       setMsg('Product Successfully Created');
       setLoading(false);
     } catch (err) {
-      console.log(err);
-      setMsg(err.message);
+      let str = 'Some Error Occured';
+      const startIndex = err.message.search(':');
+      const endIndex = err.message.search(',');
+      if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+        str = err.message.substring(startIndex + 3, endIndex - 1);
+      }
+      setMsg(str);
       setLoading(false);
     }
   }, [mfg, model, price, mrp]);

@@ -26,12 +26,20 @@ function NewBrandPage(props) {
       console.log(accounts);
       await contract.methods
         .createBrand(brandName, url)
+        .call({ from: accounts[0] });
+      await contract.methods
+        .createBrand(brandName, url)
         .send({ from: accounts[0] });
       setMsg('Brand Successfully Created');
       setLoading(false);
     } catch (err) {
-      console.log(err);
-      setMsg(err.message);
+      let str = 'Some Error Occured';
+      const startIndex = err.message.search(':');
+      const endIndex = err.message.search(',');
+      if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+        str = err.message.substring(startIndex + 3, endIndex - 1);
+      }
+      setMsg(str);
       setLoading(false);
     }
   }, [brandName, url, props]);

@@ -22,11 +22,19 @@ const BrandCard = props => {
       const { accounts, contract } = props;
       await contract.methods
         .reportBrand(props.brandDetail.brandOwner)
+        .call({ from: accounts[0] });
+      await contract.methods
+        .reportBrand(props.brandDetail.brandOwner)
         .send({ from: accounts[0] });
       refreshData();
     } catch (err) {
-      console.log(err);
-      props.setMsg(err.message);
+      let str = 'Some Error Occured';
+      const startIndex = err.message.search(':');
+      const endIndex = err.message.search(',');
+      if (endIndex >= 0 && startIndex < endIndex && startIndex >= 0) {
+        str = err.message.substring(startIndex + 3, endIndex - 1);
+      }
+      setMsg(str);
       props.setLoading(false);
     }
   }, []);
