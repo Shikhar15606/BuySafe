@@ -36,4 +36,20 @@ contract('ProductFactory', accounts => {
       )
     );
   });
+
+  it('Product price must be less than MRP', async () => {
+    await ProductFactoryInstance.createBrand('Nike', 'nike.com/logo.png', {
+      from: accounts[1],
+    });
+
+    await utils.shouldThrow(
+      ProductFactoryInstance.createProduct(
+        new Date().getTime(),
+        'Air Jordans',
+        2000,
+        1000,
+        { from: accounts[1] }
+      )
+    );
+  });
 });
