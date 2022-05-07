@@ -171,10 +171,10 @@ export async function getStaticPaths() {
         params: { productId: i.toString() },
       });
     }
-    return { paths, fallback: false };
+    return { paths, fallback: true };
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: true };
   }
 }
 
