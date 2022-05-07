@@ -37,7 +37,7 @@ const BrandCard = props => {
       console.log(str);
       props.setLoading(false);
     }
-  }, []);
+  }, [props]);
 
   const checkAccount = useCallback(async () => {
     try {

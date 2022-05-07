@@ -46,12 +46,17 @@ contract ProductFactory is Report {
         _;
     }
 
+    modifier checkMrp(uint256 _price, uint256 _mrp) {
+        require(_price <= _mrp, 'Price must be less than Maximum Retail Price');
+        _;
+    }
+
     function createProduct(
         uint256 _mfg,
         string memory _model,
         uint256 _price,
         uint256 _mrp
-    ) public checkBrand(msg.sender) {
+    ) public checkBrand(msg.sender) checkMrp(_price, _mrp) {
         products.push(Product(msg.sender, _model, _mfg, _price, _mrp, true));
         uint256 _productId = products.length - 1;
         productToOwner[_productId] = msg.sender;
