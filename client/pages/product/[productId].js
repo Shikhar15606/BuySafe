@@ -162,6 +162,7 @@ function ProductDetailPage(props) {
 
 export async function getStaticPaths() {
   try {
+    console.log('In get static paths');
     const contract = await getServerContract();
     const res = await contract.methods.productCount().call();
     console.log(res);
@@ -171,15 +172,16 @@ export async function getStaticPaths() {
         params: { productId: i.toString() },
       });
     }
-    return { paths, fallback: true };
+    return { paths, fallback: false };
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
-    return { paths: [], fallback: true };
+    return { paths: [], fallback: false };
   }
 }
 
 export async function getStaticProps(context) {
   try {
+    console.log('In get static props');
     const productId = context.params.productId;
     // now fetch all product data and pass it as props
     const contract = await getServerContract();
