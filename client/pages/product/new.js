@@ -11,7 +11,6 @@ import {
   LinkIcon,
 } from '@heroicons/react/solid';
 import CalendarComponent from '../../components/calendar';
-import Link from 'next/link';
 
 function NewProductPage(props) {
   const [model, setModel] = useState('');
@@ -119,7 +118,7 @@ function NewProductPage(props) {
                 includeMargin={true}
               />
             </div>
-            <Link href={`/product/${productId}`}>
+            <a target='_blank' href={`/product/${productId}`}>
               <button className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
                 <span className='absolute left-0 inset-y-0 flex items-center pl-3'>
                   <LinkIcon
@@ -129,7 +128,7 @@ function NewProductPage(props) {
                 </span>
                 See Details
               </button>
-            </Link>
+            </a>
 
             <button
               className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
