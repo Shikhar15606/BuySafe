@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import ErrorPage from 'next/error';
 import getServerContract from '../../lib/getServerContract';
 import ProductCard from '../../components/productCard';
 import Loading from '../../components/loading';
@@ -9,6 +10,9 @@ import Head from 'next/head';
 
 function ProductDetailPage(props) {
   const router = useRouter();
+  if (router.isFallback) return <Loading />;
+  if (props.errorStatus === 404)
+    return <ErrorPage statusCode={props.errorStatus} />;
   const productId = router.query.productId;
   let isOwner = false,
     metamaskConnected = false;
@@ -172,10 +176,10 @@ export async function getStaticPaths() {
         params: { productId: i.toString() },
       });
     }
-    return { paths, fallback: false };
+    return { paths, fallback: true };
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: true };
   }
 }
 
@@ -219,7 +223,7 @@ export async function getStaticProps(context) {
   } catch (err) {
     console.log('Error at build, I cant do much about it : ', err);
     return {
-      props: {},
+      props: { errorStatus: 404 },
       revalidate: 1,
     };
   }
