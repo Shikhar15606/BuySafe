@@ -16,7 +16,7 @@ const Hero = () => {
                     Using Tokens
                   </span>
                 </h1>
-                <p className='mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0'>
+                <p className='text-justify mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0'>
                   We verify the authenticity of products and manufacturers,
                   track their ownership, prevent counterfeiting in a completely
                   decentralized and user-friendly manner. So that you can buy
